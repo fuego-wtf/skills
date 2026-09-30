@@ -1,0 +1,6 @@
+interface:
+  display_name: "Headless Mac mini with iPad or iPhone"
+  short_description: "Use an iPad or iPhone as the only Mac display"
+  default_prompt: "Use $ipad-headless-display to set up or troubleshoot a Mac mini with an iPad or iPhone as its sole USB display."
+policy:
+  allow_implicit_invocation: true
