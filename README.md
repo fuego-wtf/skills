@@ -6,8 +6,7 @@ Categorized reusable skills from Fuego WTF.
 
 - [ipad-headless-display](skills/utility/ipad-headless-display/) turns an iPad or iPhone into the usable display for a headless Mac mini.
 
-The standalone repository remains the canonical release source for this skill:
-https://github.com/fuego-wtf/ipad-headless-display
+This collection is the canonical source for this skill.
 
 Install from this collection with:
 

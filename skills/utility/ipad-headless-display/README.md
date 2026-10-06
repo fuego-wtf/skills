@@ -1,4 +1,4 @@
-> Collection mirror. Canonical release source: https://github.com/fuego-wtf/ipad-headless-display
+> Canonical source: https://github.com/fuego-wtf/skills/tree/main/skills/utility/ipad-headless-display
 
 # iPad/iPhone Headless Display
 
@@ -13,7 +13,7 @@ This repository packages the reusable Codex skill and a small macOS helper aroun
 Install the skill with:
 
 ```bash
-npx skills add fuego-wtf/ipad-headless-display --skill ipad-headless-display
+bunx skills add fuego-wtf/skills --skill ipad-headless-display --full-depth
 ```
 
 ## What this solves
