@@ -39,10 +39,40 @@ open_ipad_links() {
 }
 
 verify() {
-  [[ -d /Applications/OpenDisplay.app ]] && echo "sender: installed" || echo "sender: missing"
-  system_profiler SPUSBDataType 2>/dev/null | rg -qi 'iPad|Apple' && echo "iPad USB: detected" || echo "iPad USB: not detected"
-  local log="$HOME/Library/Logs/OpenDisplay/opendisplay.log"
-  [[ -f "$log" ]] && tail -80 "$log" | rg 'Extending to iPad|Mirroring to iPad|Connection lost|Failed to find any displays|virtual display created' || echo "OpenDisplay log: not found"
+  local failed=0 usb_output events last_event
+  local app="${OPENDISPLAY_APP_PATH:-/Applications/OpenDisplay.app}"
+  local log="${OPENDISPLAY_LOG_PATH:-$HOME/Library/Logs/OpenDisplay/opendisplay.log}"
+  if [[ -d "$app" ]]; then
+    echo "sender: installed"
+  else
+    echo "sender: missing"; failed=1
+  fi
+  if usb_output=$(system_profiler SPUSBDataType 2>/dev/null); then
+    if printf '%s\n' "$usb_output" | rg -qi '^[[:space:]]*(iPad|iPhone)([[:space:]][^:]*)?:[[:space:]]*$'; then
+      echo "iPad/iPhone USB: detected"
+    else
+      echo "iPad/iPhone USB: not detected"; failed=1
+    fi
+  else
+    echo "iPad/iPhone USB: inspection failed"; failed=1
+  fi
+  if [[ ! -f "$log" ]]; then
+    echo "OpenDisplay log: not found ($log)"; failed=1
+  elif [[ ! -r "$log" ]]; then
+    echo "OpenDisplay log: unreadable ($log)"; failed=1
+  elif events=$(tail -80 "$log" | rg 'Extending to (iPad|iPhone)|Mirroring to (iPad|iPhone)|Connection lost|Failed to find any displays|virtual display created|mode (extend|mirror)'); then
+    printf '%s\n' "$events"
+    last_event=$(printf '%s\n' "$events" | tail -1)
+    if printf '%s\n' "$last_event" | rg -q 'Extending to (iPad|iPhone)|mode extend'; then
+      echo "OpenDisplay log: latest relevant event indicates Extend"
+    else
+      echo "OpenDisplay log: Extend not confirmed by latest relevant event"; failed=1
+    fi
+  else
+    echo "OpenDisplay log: present, but no relevant events in the last 80 lines"; failed=1
+  fi
+  echo "Confirm live updates on the receiver with the physical monitor unplugged; historical logs alone cannot prove a live stream."
+  return "$failed"
 }
 
 [[ $# -gt 0 ]] || { usage; exit 0; }

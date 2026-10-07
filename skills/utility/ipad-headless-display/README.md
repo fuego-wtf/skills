@@ -69,6 +69,8 @@ In the Mac app, select the iPad or iPhone and choose **Extend**. Wait for the st
 
 Configure OpenDisplay launch at login if needed. Keep FileVault and pre-boot authentication enabled. Do not enable automatic login as part of this setup. After Extend mode is verified, unplug only the physical monitor cable. Keep the iPad or iPhone USB cable connected.
 
+**Cold boot/restart limitation:** OpenDisplay only works after macOS login; it cannot show the FileVault pre-boot unlock screen. Keep a physical monitor available for recovery after a cold boot or restart with FileVault enabled. Launch at login does not provide unattended iPad-only boot.
+
 ## Mirror versus Extend
 
 Use **Extend** for a headless Mac. Mirror captures the physical monitor; when that monitor is unplugged, macOS can report `Failed to find any displays or windows to capture` and the iPad or iPhone freezes on the last frame. Extend creates the independent virtual monitor that remains available after the physical monitor is removed.
@@ -80,6 +82,8 @@ Use **Extend** for a headless Mac. Mirror captures the physical monitor; when th
 ```
 
 The command checks the sender, USB visibility, and recent OpenDisplay log events. A healthy final state includes `Extending to iPad` and no repeating `Connection lost` messages.
+
+It exits 1 if any check fails or is inconclusive, including a missing log or a log with no relevant recent events. Exit 0 is a diagnostic result, not proof of a live stream: verify that the receiver updates with the physical monitor unplugged. `OPENDISPLAY_APP_PATH` and `OPENDISPLAY_LOG_PATH` optionally select non-default diagnostic paths.
 
 If the iPad is frozen:
 

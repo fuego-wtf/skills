@@ -37,6 +37,8 @@ If the App Store reports that the app is unavailable in the user's country, use 
 7. Configure the sender to launch at login if needed. Keep FileVault and pre-boot authentication enabled by default. Do not enable automatic login or weaken disk protection as part of this workflow; treat any exception as a separately approved security decision. Prevent sleep while the display is off.
 8. Unplug only the physical monitor cable. Keep the iPad or iPhone data cable connected. The Mac's virtual OpenDisplay monitor is now the sole usable display.
 
+This works after macOS login, not at FileVault pre-boot unlock. OpenDisplay cannot display the FileVault unlock screen because its sender is not running yet. With FileVault enabled, keep a physical monitor available for cold-boot/restart recovery; launch at login does not remove this limitation. Do not promise unattended iPad-only cold boot or disable FileVault to bypass it.
+
 ## Critical distinction
 
 Never use **Mirror** for the headless final state. Mirror captures the physical monitor; when that monitor is unplugged, ScreenCaptureKit can fail with `Failed to find any displays or windows to capture` and the iPad or iPhone freezes on its last frame. Extend creates an independent virtual monitor and survives removal of the physical monitor.
@@ -46,6 +48,8 @@ The USB-C cable must remain connected after the monitor is removed. The cable ca
 ## Verification
 
 Verify the actual end state rather than relying on a successful connection message:
+
+Run `zsh scripts/setup-opendisplay.sh --verify` from the skill directory for read-only checks. Exit 0 means the sender, named iPad/iPhone USB device, and latest relevant log event passed; exit 1 means at least one check failed or is inconclusive. Always perform the live-screen checks below even when it succeeds.
 
 - OpenDisplay log shows `Extending to iPad`, not `Mirroring to iPad`.
 - The iPad updates after a new window is opened or moved.

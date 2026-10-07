@@ -9,4 +9,6 @@ The first connection must be made with a physical monitor still attached. Connec
 
 Select **Extend** in OpenDisplay and wait for `Extending to iPad`. Do not select Mirror: Mirror captures the physical monitor and freezes when it is unplugged. After Extend is verified, unplug only the physical monitor; keep the iPad or iPhone USB cable connected.
 
+OpenDisplay requires macOS login and cannot show FileVault pre-boot unlock. Keep a physical monitor available for cold-boot/restart recovery; launch at login does not solve pre-boot access. Keep FileVault enabled.
+
 For a frozen screen, reconnect the physical monitor, reconnect the iPad or iPhone, reopen both apps, select Extend again, and verify the log. Café Wi-Fi is not a dependable fallback because client isolation can block Bonjour; use USB or a private hotspot/router.
